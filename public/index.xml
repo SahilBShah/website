@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Sahil Shah</title>
+    <link>/</link>
+    <description>Recent content on Sahil Shah</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>en-US</language>
+    <lastBuildDate>Sun, 02 Oct 2016 22:55:05 -0400</lastBuildDate>
+    
+	<atom:link href="/index.xml" rel="self" type="application/rss+xml" />
+    
+    
+    <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Sun, 02 Oct 2016 22:55:05 -0400</pubDate>
+      
+      <guid>/projects/</guid>
+      <description></description>
+    </item>
+    
+    <item>
+      <title>Hello R Markdown</title>
+      <link>/blog/2015-07-23-r-rmarkdown/</link>
+      <pubDate>Thu, 23 Jul 2015 21:13:14 -0500</pubDate>
+      
+      <guid>/blog/2015-07-23-r-rmarkdown/</guid>
+      <description>R Markdown This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see http://rmarkdown.rstudio.com.
+You can embed an R code chunk like this:
+summary(cars) ## speed dist ## Min. : 4.0 Min. : 2.00 ## 1st Qu.:12.0 1st Qu.: 26.00 ## Median :15.0 Median : 36.00 ## Mean :15.4 Mean : 42.98 ## 3rd Qu.</description>
+    </item>
+    
+    <item>
+      <title>Creating a New Theme</title>
+      <link>/blog/creating-a-new-theme/</link>
+      <pubDate>Sun, 28 Sep 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/creating-a-new-theme/</guid>
+      <description>Introduction This tutorial will show you how to create a simple theme in Hugo. I assume that you are familiar with HTML, the bash command line, and that you are comfortable using Markdown to format content. I&#39;ll explain how Hugo uses templates and how you can organize your templates to create a theme. I won&#39;t cover using CSS to style your theme.
+We&#39;ll start with creating a new site with a very basic template.</description>
+    </item>
+    
+    <item>
+      <title>(Hu)go Template Primer</title>
+      <link>/blog/goisforlovers/</link>
+      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/goisforlovers/</guid>
+      <description>Hugo uses the excellent go html/template library for its template engine. It is an extremely lightweight engine that provides a very small amount of logic. In our experience that it is just the right amount of logic to be able to create a good static website. If you have used other template systems from different languages or frameworks you will find a lot of similarities in go templates.
+This document is a brief primer on using go templates.</description>
+    </item>
+    
+    <item>
+      <title>Getting Started with Hugo</title>
+      <link>/blog/hugoisforlovers/</link>
+      <pubDate>Wed, 02 Apr 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/hugoisforlovers/</guid>
+      <description>Step 1. Install Hugo Goto hugo releases and download the appropriate version for your os and architecture.
+Save it somewhere specific as we will be using it in the next step.
+More complete instructions are available at installing hugo
+Step 2. Build the Docs Hugo has its own example site which happens to also be the documentation site you are reading right now.
+Follow the following steps:
+ Clone the hugo repository Go into the repo Run hugo in server mode and build the docs Open your browser to http://localhost:1313  Corresponding pseudo commands:</description>
+    </item>
+    
+    <item>
+      <title>Migrate to Hugo from Jekyll</title>
+      <link>/blog/migrate-from-jekyll/</link>
+      <pubDate>Mon, 10 Mar 2014 00:00:00 +0000</pubDate>
+      
+      <guid>/blog/migrate-from-jekyll/</guid>
+      <description>Move static content to static Jekyll has a rule that any directory not starting with _ will be copied as-is to the _site output. Hugo keeps all static content under static. You should therefore move it all there. With Jekyll, something that looked like
+▾ &amp;lt;root&amp;gt;/ ▾ images/ logo.png  should become
+▾ &amp;lt;root&amp;gt;/ ▾ static/ ▾ images/ logo.png  Additionally, you&#39;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description>
+    </item>
+    
+    <item>
+      <title>college_resume</title>
+      <link>/college_resume/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/college_resume/</guid>
+      <description>Sahil B. Shah (832) 782-7923 | sahil2699@gmail.com | 910 W 25th Apt 405, Austin, TX 78705 Education The University of Texas at Austin The University of Texas at San Antonio Major: Computational Biology Minors: Computer Science and Applied Statistical Modeling Overall GPA: 3.6623/4.00 UT GPA: 3.5143/4.00 August 2018 - Present August 2017 - May 2018 Pre-Professional Experience Dr. Claus O. Wilke Lab, Undergraduate Researcher June 2019 - Present • Computationally research viral genomic patterns to determine gene regulatory mechanisms TIDES Fellowship, Undergraduate Researcher June 2019 - July 2019 • Computationally research viral genomic patterns to determine gene regulatory mechanisms Virtual Cures ARI, Undergraduate Researcher January 2019 - Present • Research potential cures for Plasmodium vivax through virtual screening and wet lab techniques MOVE San Antonio, Intern January 2018 - June 2018 • Fundraise for the organization, organize community events, and register citizens to vote Texas Mission of Mercy, Volunteer October 2017 - Present • Assist dentists with dental procedures and bring in patients to the operating room Texas Periodontists, Intern Dental Assistant June 2018 - August 2018 • Assist dentists with dental procedures, X-rays, and sterilization UTSA Brush Rush, Volunteer October 2017 - May 2018 • Teach elementary school students about dental hygiene BAPS Shri Swaminarayan Temple Health Fair, Volunteer September 2017 • Assist dentists with dental screenings MD Anderson Cancer Center, Intern July 2016 • Assisted an anesthesiologist with caring for a patient’s needs • Observed medical procedures performed by various surgeons Extracurricular Activities UT Austin Sanger Learning Center, PLUS Facilitator January 2019 - May 2019 • Lead discussions and teach material in biochemistry to students Organic Chemistry Tutor, Tutor September 2018 - December 2018 • Tutor college students in Organic Chemistry Indo-American Forum of Fort Bend, Volunteer August 2013 - May 2019 • Help setup and plan multicultural events for the community Elections Office of San Antonio, Voter Registrar September 2017 - May 2018 • Registering voters in Bexar County UTSA GlobeMed, Member August 2017 - May 2018 • Fundraise for Sacred Valley Health to create a self-sustaining community in Peru St.</description>
+    </item>
+    
+  </channel>
+</rss>
