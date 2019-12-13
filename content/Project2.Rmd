@@ -1,0 +1,211 @@
+---
+title: "Project 2: Modeling"
+author: "Sahil Shah"
+date: "11/21/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Name: Sahil Shah
+UT EID: sbs2756
+```{R}
+library(dplyr)
+setwd("/home/sahil/Documents/SDS 348/")
+mlb <- read.csv("mlb.csv")
+mlb <- mlb %>% subset(League!='Both')
+```
+
+*Summary of dataset*
+The dataset that I have chosen to use contains the statistics of the top 100 batters in the MLB during the 2014 season. The variables in the dataset are AB which stands for at bat and means when a batter reaches a base via a hit, errror, or fielder's choice, R which stands for run and means when a batter reaches home plate and scores a point for their team, H which stands for hit and means that the batter reached first base via only a hit, HR which stands for home run and represents the amount of times the batter has hit a home run, RBI which stands for run batted in and means that the batter allowed for runs to be scored when they batted, SB which stands for stolen base and represents the amount of bases the batter stole while a pitcher was throwing the ball, CS which stands for caught stealing and represents the number of times a batter was called out when trying to steal a base, AVG swhich stands for batting average and represents the the percentage in which the batter is able to hit the ball and make a play, OBP which stands for on base percentage and refers to how frequently a batter reaches base for each plate appearance, and SLG which stands for slugging percentage and refers to the amount of bases the batter gets per plate appearance.
+
+```{R}
+#Conducting a MONOVA test
+man <- manova(cbind(AB, R, H, HR, RBI, SB, CS, AVG, OBP, SLG)~League, data=mlb)
+summary(man)
+summary.aov(man)
+0.05 / 1 #Bonferroni correction
+```
+
+*Discuss significant differences and if assumptions were met*
+None of the numeric variables tested show a mean difference across the two leagues, American and National as none of the p-values calculated are below 0.05. Thus, I did not conduct any univariate ANOVA tests nor did I conduct any post-hoc t-tests. However, if a numeric variable was significant across the two leagues then I would have conducted these tests. Therefore, I onlt performed one test which was the MANOVA test and also had a p-value that was greater than 0..05 meaning that it was not significant. The probability I would have made a Type I error is 0.05 as that is the significance level that I was using to determine signifcance between the numeric variables and the two leagues. After conducting the Bonferroni correction, the significance level remained at 0.05 as the only test that I performed was the MANOVA so the level did not decrease. The assumptions for MANOVA were most likely not met as the numeric values for each player could be overdispersed with a wide range of percentages and amounts. However, if the manova test was significant then we would have to conduct 10 univariate ANOVA tests and 2 post hoc t tests for each one since there are two leagues in the MLB. Thus, the adjusted significance level would have been 0.05 / 31 = 0.0016.
+
+```{R}
+#Randomization test - t-test
+t.test(AVG~League, data=mlb)
+#Null distribution
+rand_dist <- vector()
+for(i in 1:5000){
+  df <- data.frame(AVG=sample(mlb$AVG), League=mlb$League)
+  rand_dist[i] <- mean(df[df$League=='American',]$AVG) - mean(df[df$League=='National',]$AVG)
+}
+mlb%>%group_by(League)%>%summarize(s=mean(AVG))%>%summarize(diff(s))
+{hist(rand_dist); abline(v=c(-0.003326531	, 0.003326531), col='red')}
+mean(rand_dist > 0.003326531)*2 #pvalue
+
+```
+
+*State null and alternative hypotheses, perform the test, and interpret the results*
+The null hypothesis is that there will be no difference in batting averages between the two leagues. The alternative hypothesis is that there is a difference in batting averages between the two leagues. When conducting a t-test, we can observe that the p-value calculated is greater than 0.05 meaning that the variable accounting for batting average is not significant. Thus, we fail to reject the null hypothesis and concude that there might not be a difference in batting averages between the two leagues.
+
+```{R}
+#Linear regression model
+library(ggplot2)
+library(tidyverse)
+library(lmtest)
+library(sandwich)
+new <- mlb
+new$SLG <- new$SLG - mean(new$SLG)
+new$AVG <- new$AVG - mean(new$AVG)
+fit <- lm(new$AVG~new$SLG*new$League)
+summary(fit)
+coef(fit)
+
+new%>%ggplot(aes(x=SLG,y=AVG))+geom_point(aes(color=League))+geom_line(aes(y=predict(fit, new),color=League),size=1)+theme(legend.position=c(.9,.19))+ggtitle("t-test controlling for SLG")
+
+#Check linearity and homoskedstacity
+resids<-fit$residuals
+fitvals<-fit$fitted.values
+ggplot()+geom_point(aes(fitvals,resids))+geom_hline(yintercept=0, color='red')
+
+#Check normality
+ggplot()+geom_qq(aes(sample=resids))+geom_qq_line(aes(sample=resids))
+shapiro.test(resids) #Ho: distribution is normal
+
+coeftest(fit, vcov=vcovHC(fit))
+no_int <- lm(new$AVG~new$SLG+new$League)
+summary(no_int)
+
+#Proportion of variance
+0.048725+0.004191+0.070752
+```
+
+*Interpret the coefficient estimates, Check assumptions, Discuss significance of results, including any changes from before/after robust SEs if applicable, What proportion of the variation in the outcome does your model explain*
+The coefficient estimates for SLG, being in the National league, and the interaction between the two variables are as follows: 0.192950945, 0.001946210, 0.040821741. This means that for every unit increase in SLG, slugging percentage, a player's batting average will increase by 0.192950945; if a player is in the National league then that player's batting average increases by 0.001946210 compared to being in the American league; and if a plyer is in the National league and for every unit increase in the player's SLG statistic, their batting average increases by 0.040821741. All assumptions of linearity, homoskedstacity, and normality have all been met. This is determined by the graphs produced above and normality was further proven true by conducting a a Shapiro-Wilkes test as obtaining a p-value greater than 0.05 confirming that normality has been met. After recomputing the regression results with robust standard errors, the only variable that was significant was SLG, a player's slugging percentage. However, previously, the SLG statistic was significant before recomputing the regression results as it had a p-value of 0.000146 and a p-value of 0.0001223 after recomputing. However, all the standard error values for each variable changed as the values before, for SLG, being in the National league, and their interaction, were 0.048725, 0.004191, and 0.070752, respectively. After recomputing the standard error values for SLG, being in the National league, and their interaction were 0.0481347, 0.0042905, and 0.0680631, respecitvely. If the amount of variance that each variable explained were added together, the total amount of variance explained by the model would be 0.123668.
+
+```{R}
+#Bootstrapped SE's
+set.seed(12)
+samp_distn<-replicate(5000, {
+boot_dat<-new[sample(nrow(new),replace=TRUE),]
+fit1<-lm(AVG~SLG*League,data=boot_dat)
+coef(fit1)
+})
+## Estimated SEs
+samp_distn%>%t%>%as.data.frame%>%summarize_all(sd)
+```
+
+*Discuss any changes you observe in SEs and p-values using these SEs compared to the original SEs and the robust SEs*
+Although there are slight differences between the bootstrapped standard error values and the original and robust standard error values, the differences are miniscule. The standard error value from the bootstrapped model for SLG, being in the National league and their interaction were 0.0472222, 0.004225108, and 0.06487124, respecitvely, whereas the standard error value found in the original model for the same variables were 0.048725, 0.004191, and 0.070752, respecitvely. This means that the bootstrapping technique is an accurate method in trying to determine the significance of variables in a linear model. The p-values are also similar in that only the SLG variable is significant in the model whereas the other two are not.
+
+```{R}
+library(plotROC)
+#Logistic regression
+class_diag<-function(probs,truth){
+  
+  tab<-table(factor(probs>.5,levels=c("FALSE","TRUE")),truth)
+  acc=sum(diag(tab))/sum(tab)
+  sens=tab[2,2]/colSums(tab)[2]
+  spec=tab[1,1]/colSums(tab)[1]
+  ppv=tab[2,2]/rowSums(tab)[2]
+
+  if(is.numeric(truth)==FALSE & is.logical(truth)==FALSE) truth<-as.numeric(truth)-1
+  
+  #CALCULATE EXACT AUC
+  ord<-order(probs, decreasing=TRUE)
+  probs <- probs[ord]; truth <- truth[ord]
+  
+  TPR=cumsum(truth)/max(1,sum(truth)) 
+  FPR=cumsum(!truth)/max(1,sum(!truth))
+  
+  dup<-c(probs[-1]>=probs[-length(probs)], FALSE)
+  TPR<-c(0,TPR[!dup],1); FPR<-c(0,FPR[!dup],1)
+  
+  n <- length(TPR)
+  auc<- sum( ((TPR[-1]+TPR[-n])/2) * (FPR[-1]-FPR[-n]) )
+
+  data.frame(acc,sens,spec,ppv,auc)
+}
+log_fit <- glm(League~AVG+SLG+HR+SB+OBP, data=mlb, family='binomial')
+summary(log_fit)
+prob <- predict(log_fit, type='response')
+class_diag(prob, mlb$League)
+#Confusion matrix
+table(predict=as.numeric(prob>.5),truth=mlb$League)%>%addmargins
+#Density plot
+mlb$logit<-predict(log_fit,type="link")
+mlb$League <- as.factor(mlb$League)
+mlb%>%ggplot()+geom_density(aes(logit,color=League,fill=League),alpha=.4)+theme(legend.position=c(.85,.85))+ geom_vline(xintercept=0)+xlab("predictor (logit)")
+
+#ROC and AUC
+mlb$League <- ifelse(mlb$League=='National', 1, 0)
+classify <- mlb %>% transmute(prob=predict(log_fit, type='response') , truth=League)
+ROCplot <- ggplot(classify) + geom_roc(aes(d=truth, m=prob), n.cuts=0)
+ROCplot
+calc_auc(ROCplot)
+
+#10-fold
+set.seed(1234)
+k=10
+
+data1<-mlb[sample(nrow(mlb)),] #put dataset in random order
+folds<-cut(seq(1:nrow(mlb)),breaks=k,labels=F) #create folds
+
+diags<-NULL
+for(i in 1:k){ # FOR EACH OF 10 FOLDS
+  train<-data1[folds!=i,] #CREATE TRAINING SET
+  test<-data1[folds==i,] #CREATE TESTING SET
+  truth<-test$League
+  
+  log_fit2<- glm(League~AVG+SLG+HR+SB+OBP, data=train, family='binomial')
+    probs<- predict(log_fit2, newdata=test, type='response')
+      
+      diags<-rbind(diags,class_diag(probs,truth)) 
+}
+
+apply(diags,2,mean) #AVERAGE THE DIAGNOSTICS ACROSS THE 10 FOLDS
+```
+
+*Interpret coefficient estimates in context, discuss the Accuracy, Sensitivity (TPR), Specificity (TNR), and Recall (PPV) of your model, interpret ROC and AUC, and report average out-of-sample Accuracy, Sensitivity, and Recall*
+The coefficient estimates calculated for each variable from AVG, SLG, HR, SB, and OBP are as follows: -23.27013, 11.67240, -0.09304, -0.01401, and 18.04861. For the AVG variable this means that for every unit increase in batting average, the likelihood that a player is in the National league decreases by 23.27013 units. For the SLG variable this means that for every unit increse in slugging percentage, the likelihood that a player is in the National league increases by 11.67240 units. For the HR variable this means that for every home run hit, the likelihood that a player plays in the National league decreases by 0.09304 units. For the SB variable this means that for every stolen base, the likelihood that a player plays in the National league decreases by 0.01401 units. For the OBP variable this means that for every unit increse in on base percentage, the likelihood a player plays in the National league increases by 18.04861 units. The accuracy, sensitivity, specificity, and recall values found are 0.5918367, 0.5714286, 0.6122449, and 0.5957447, respectively. These values mean that the model created is an alright model for predicting which player will be in the National or American league based in their AVG, SLG, HR, SB, and OBP statistics. However, the accuracy of the model is only about 60% which means that more variables may need to be added into the model to find a better predictor of determining which player would play in each league. The sensitivity and specificity are also around 60% which means that the model correctly predicts a positive and a negative only about 60% of the time. Furthermore, the recall value is also around 60% which means that the model correctly classifies the results only about 60% of the time as well. The assertion that this model is not a great predictor in classifying which player plays in a certain league is further confirmed when analyzing the ROC curve. The ROC plot shows us that there may be certain instances where the model predicts incorrectly and only predicts the data correctly a little over 50% of the time which is consistent with the classification data we previously analyzed. The AUC value found was 0.6522282 which means that the probability of randomly selecting a person that plays in the National league has a higher prediction that a randomly selected person that plays in the American league. The average out-of-sample accuracy, sensitivity, and recall values found were 0.5444444, 0.5659524, and 0.6178571, respectively.
+
+```{R}
+#LASSO
+library(glmnet)
+y<-as.matrix(mlb$League)  ###save response variable 
+x<-model.matrix(log_fit)  ###save matrix of all predictors (dropping the response variable)
+x <- x[,-1]
+
+cv<-cv.glmnet(x,y,family="binomial")
+lasso<-glmnet(x,y,family="binomial",lambda=cv$lambda.1se)
+coef(lasso)
+fit<- glm(League~AVG+SLG+HR+SB+OBP, data=mlb, family='binomial')
+
+prob <- predict(fit, type='response')
+class_diag(prob, mlb$League)
+
+set.seed(1245)
+k=10
+
+# your code here
+data1<-mlb[sample(nrow(mlb)),] #put dataset in random order
+folds<-cut(seq(1:nrow(mlb)),breaks=k,labels=F) #create folds
+
+diags<-NULL
+for(i in 1:k){ # FOR EACH OF 10 FOLDS
+  train<-data1[folds!=i,] #CREATE TRAINING SET
+  test<-data1[folds==i,] #CREATE TESTING SET
+  truth<-test$League
+  
+  lasso_fit<- glm(League~AVG+SLG+HR+SB+OBP, data=train, family='binomial')
+    probs<- predict(lasso_fit, newdata=test, type='response')
+      
+      diags<-rbind(diags,class_diag(probs,truth)) 
+}
+
+apply(diags,2,mean) #AVERAGE THE DIAGNOSTICS ACROSS THE 10 FOLDS
+```
+
+*Discuss which variables are retained, compare model’s out-of-sample accuracy to that of your logistic regression in part 5*
+The only variable that was retained after running a LASSO regression was the AVG variable. The out-of-sample accuracy value found was 0.5322222 is similar to, but less than the one found in the logisitc regression in part 5, 0.5918367. However, the value is more similar to the out-of-sample accuracy value found in part 5, 0.5444444.

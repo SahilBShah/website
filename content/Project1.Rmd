@@ -1,0 +1,173 @@
+---
+title: 'Project 1: Exploratory Data Analysis'
+author: "Sahil Shah"
+UT Eid: "sbs2756"
+date: "10/19/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(carData)
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(gridExtra)
+
+```
+
+```{r start}
+#Joining dataframes
+demo <- as.data.frame(MplsDemo)
+stops <- as.data.frame(MplsStops)
+stops <- stops %>% pivot_wider(names_from=problem, values_from=preRace)
+stops <- stops %>% pivot_longer(cols=c('suspicious', 'traffic'), names_to='problem', values_to='preRace')
+fulldata <- right_join(demo, stops) %>% na.omit(col=personSearch)
+diff_neighborhoods <- anti_join(demo, stops)
+
+#Adding variables in the joined dataframe
+fulldata <- fulldata %>% mutate(white_pop=white*population, black_pop=black*population, foreign_pop=foreignBorn*population, in_poverty=poverty*population, college_educated=collegeGrad*population)
+fulldata <- fulldata %>% group_by(neighborhood, race) %>% mutate(race_number_of_stops=n())
+fulldata <- fulldata %>% group_by(neighborhood, gender) %>% mutate(gender_number_of_stops=n())
+```
+
+The reason I decided to do a right join on the two data frames is because this would provide information about each person and the neighborhood they live in to determine if certain precincts have more arrests in one neighborhood over another and if there is a disproporionate number of arrests based on race or gender. Also, no cases in the MplsStops nor the MplsDemo datasets were dorpped when joined together.
+
+```{r cars}
+#Shows number of arrests by race
+race_stops <- fulldata %>% group_by(race) %>% summarize(sum_stops=sum(race_number_of_stops)) %>% arrange(sum_stops)
+glimpse(race_stops)
+```
+
+```{r pressure}
+#Shows number of arrests by gender
+gender_stops <- fulldata %>% group_by(gender) %>% summarize(sum_stops=sum(gender_number_of_stops))
+glimpse(gender_stops)
+```
+
+```{r explore1}
+#Shows number of arrests by gender
+gender_stops <- fulldata %>% group_by(gender) %>% summarize(sum_stops=sum(gender_number_of_stops))
+glimpse(gender_stops)
+```
+
+```{r explore2}
+#Number of stops by neighborhood
+fulldata %>% select(race, neighborhood, race_number_of_stops) %>% group_by(neighborhood) %>% summarize(sum_stops=sum(race_number_of_stops)) %>% arrange(desc(sum_stops))
+fulldata %>% select(neighborhood, white, black, foreignBorn) %>% subset(select=-gender) %>% unique() %>% arrange(desc(black))
+```
+
+```{r explore3}
+#Ratio of blacks to whites in each neighborhood
+fulldata %>% mutate(bw=black_pop/white_pop) %>% select(neighborhood, bw) %>% subset(select=-gender) %>% unique() %>% arrange(desc(bw))
+```
+
+```{r explore4}
+#Ratio of non-white neighborhoods
+non_white_neigh <- fulldata %>% mutate(ratio=(black_pop+foreign_pop)/white_pop) %>% select(neighborhood, ratio) %>% subset(select=-gender) %>% unique() %>% arrange(desc(ratio))
+glimpse(non_white_neigh)
+```
+
+```{r explore5}
+#Number of citations by race
+race_cites <- fulldata %>% select(race, citationIssued) %>% filter(citationIssued=='YES') %>% group_by(race) %>% summarise(sum_cites=n())
+glimpse(race_cites)
+```
+
+```{r explore6}
+#Gives ratio of citations per stop by each race
+race_cites_per_stop <- full_join(race_stops, race_cites) %>% mutate(perc_of_cites=100*(sum_cites/sum_stops))
+glimpse(race_cites_per_stop)
+```
+
+```{r explore7}
+#Gives ratio of citations per stop by gender
+gender_cites <- fulldata %>% select(gender, citationIssued) %>% filter(citationIssued=='YES') %>% group_by(gender) %>% summarise(sum_cites=n())
+full_join(gender_stops, gender_cites) %>% mutate(perc_of_cites=100*(sum_cites/sum_stops))
+```
+
+```{r explore8}
+#College educated in each neighborhood - 7 out of the top 10 non-white neighborhoods are the least college educated in Minneapolis
+college_edu <- fulldata %>% select(neighborhood, collegeGrad) %>% subset(select=-gender) %>% unique() %>% arrange(collegeGrad)
+glimpse(college_edu)
+```
+
+```{r explore9}
+#Summary stats for each race
+race_stops_summary <- fulldata %>% group_by(race) %>% summarize(mean_stops=mean(race_number_of_stops), sd_stops=sd(race_number_of_stops), var_stops=var(race_number_of_stops)) %>% arrange(mean_stops)
+glimpse(race_stops_summary)
+quantile(fulldata$race_number_of_stops)
+min(fulldata$race_number_of_stops)
+max(fulldata$race_number_of_stops)
+```
+
+```{r explore10}
+#Summary statistice for each gender
+gender_stops_summary <- fulldata %>% group_by(gender) %>% summarize(mean_stops=mean(gender_number_of_stops), sd_stops=sd(gender_number_of_stops), var_stops=var(gender_number_of_stops)) %>% arrange(mean_stops)
+glimpse(gender_stops_summary)
+quantile(fulldata$gender_number_of_stops)
+min(fulldata$gender_number_of_stops)
+max(fulldata$gender_number_of_stops)
+```
+
+```{r explore11}
+#Number of stops per precinct
+pol_prec_demo <- fulldata %>% select(policePrecinct, white, black, foreignBorn) %>% subset(select=-c(neighborhood, gender)) %>% unique() %>% mutate(perc_foreign=100*foreignBorn)
+nstops_precinct <- fulldata %>% group_by(policePrecinct) %>% summarize(sum_stops=n())
+avg_foreign_born <- pol_prec_demo %>% group_by(policePrecinct) %>% summarize(mean_foreign=mean(foreignBorn))
+full_join(avg_foreign_born, nstops_precinct) %>% arrange(mean_foreign)
+```
+
+Each of the functions used thus far were to find correlations between certain variables and determine if we can observe a pattern between the numeric variables. Each function used was necessary in tring to interpret certain correlations that could be portrayed in plots for the next portion of this project.
+
+```{r graphs1}
+#Create graphs
+#College educated by race
+white_college <- fulldata %>% ggplot(aes(x=white, y=collegeGrad)) + geom_line(stat='identity') + ylab('College Educated') + xlab('Percent White in Neighborhood')
+black_college <- fulldata %>% ggplot(aes(x=black, y=collegeGrad)) + geom_line(stat='identity') + ylab('College Educated') + xlab('Percent Black in Neighborhood')
+college_income <- fulldata %>% ggplot(aes(x=collegeGrad, y=hhIncome)) + geom_line(stat='identity') + ylab('Household Income') + xlab('Percent Foreign Born in Neighborhood')
+grid.arrange(white_college, black_college, college_income)
+```
+
+These three graphs portray the relationship between college education, race, and household income and were necessary to show how college education disproportionately favors those that are white compared to those that are black. We can observe from these plots that neighborhoods that have a higher population of whites tend to be college educated and those that are colege educated have higher household incomes. Thus, we can interpret that whites have higher household incomes and that neighborhoods that are predominantly white are disproportionately richer than their non-white counterparts.
+
+```{r graphs2}
+#Number of stops by race
+nstops_bar <- race_stops %>% ggplot(aes(x=race, y=sum_stops, fill=race)) + geom_bar(stat='identity') + xlab('Race') + ylab('Number of Stops')
+ncites_bar <- race_cites_per_stop %>% ggplot(aes(x=race, y=perc_of_cites, fill=race)) + geom_bar(stat='identity') + xlab('Race') + ylab('Percent Chance of a Citation per Stop')
+grid.arrange(nstops_bar, ncites_bar)
+```
+
+These two bar graphs display data related to the number of stops by race and the percent chance that a certain race will be issued a citation when stopped. Interestingly, although blacks are stopped at a disproportionately high rate, asians and latinos are issued the most citations. Thus, this information shows that even if a certain race is stopped at a high rate that does not necessarily mean that they will receive a citation of any sort as asians and latinos are stopped at a relatively low rate. Although there are some that were of an unknown race and were stopped that could potentially skew the data, there are enough data points in order to make certain conclusions.
+
+```{r graphs3}
+#Relationship between foreign born and number of stops per precinct
+foreign_stops_bar <- pol_prec_demo %>% ggplot(aes(x=policePrecinct, y=perc_foreign, fill=policePrecinct)) + geom_bar(stat='summary', fun.y='mean') + xlab('Police Precinct') + ylab('Average Percent of Foreigners per Precinct')
+precinct_nstops <- nstops_precinct %>% ggplot(aes(x=policePrecinct, y=sum_stops, fill=policePrecinct)) + geom_bar(stat='identity') + xlab('Police Precinct') + ylab('Total Number of Stops per Precinct')
+grid.arrange(precinct_nstops, foreign_stops_bar)
+```
+
+These two bar graphs display an interesting trend within the number of stops each police precinct makes. When looking at the first graph, one can determine the average number of stops each precinct has made. The second graph tells us the average number of foreigners contained within eahc precinct's jurisdiction. When comparing the two graphs, it is apparent that precincts with more foreigners within their jurisdiction have less stops. However, when exploring the dataset from before, we could determine that blacks and whites were both arrested at high rates within each precinct and no trand could be found from that data. Thus, we can conclude that neighborhoods with more foreign born residents will have less stops in their area.
+
+```{r pca}
+#PCA
+#A variable is created to view the correlation matrix of the numeric variables
+full <- fulldata %>% select(white, black, foreignBorn, hhIncome, race_number_of_stops, collegeGrad, gender_number_of_stops) %>% subset(select=-c(neighborhood, gender)) %>% unique()
+cor_mat <- full %>% cor()
+cor_mat
+#A variable is created to be used for principle component analysis as rotations are given by using the function, prcomp()
+full_pca <- fulldata %>% select(white, black, foreignBorn, hhIncome, race_number_of_stops, collegeGrad, gender_number_of_stops) %>% subset(select=-c(neighborhood, gender)) %>% unique() %>% scale() %>% prcomp()
+#These were to show the statistics of the principal component analysis before plotting
+full_pca$rotation
+full_pca %>% summary()
+cor_mat %>% eigen()
+
+#This is the plot after pca has been conducted
+full_pca$rotation[,1:2]%>%as.data.frame%>%rownames_to_column%>%
+  ggplot()+geom_hline(aes(yintercept=0),lty=2)+
+  geom_vline(aes(xintercept=0),lty=2)+ylab("PC2")+xlab("PC1")+
+  geom_segment(aes(x=0,y=0,xend=PC1,yend=PC2),arrow=arrow(),col="red")+
+  geom_label(aes(x=PC1*1.1,y=PC2*1.1,label=rowname))
+```
+
+After principle component analysis was conducted and the plot was generated, many of my correlations found from before are further supported. We can see that PC1 separates those that have a college education, are white, and have a high household income from the number of stops by race and gender and those that are foreign born or black. Thus, this information supports my assertions that whites tend to be more college educated and have a higher household income in Minneapolis than those that are black or foreign born. Furthermore, whites are stopped at a lower rate than their non-white counterparts. One other interesting correlation is that both non-white men and women tend to be stopped at a higher rate than whites regardless of gender.
