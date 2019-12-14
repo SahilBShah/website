@@ -55,7 +55,7 @@ library(dplyr) ## ## Attaching package: &amp;#39;dplyr&amp;#39; ## The following
       
       <guid>/projects/</guid>
       <description>Python Projects:
-Evolutionary Program Utilizing the pinetree simulator: Evolutionary program that automatically evolves genomes based on user’s specifications.
+Evolutionary Program Utilizing the pinetree Simulator: Evolutionary program that automatically evolves genomes based on user’s specifications.
 Data Structures and Recursion: Assignments completed in a data structures and algorithms computer science course.
 R Projects:
 Data Wrangling and Exploratory Analysis: Preliminary data analysis on the neighborhood demographics and total arrests in Minneapolis in 2017.
