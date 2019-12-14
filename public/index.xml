@@ -76,5 +76,38 @@ Follow the following steps:
 ▾ &amp;lt;root&amp;gt;/ ▾ static/ ▾ images/ logo.png  Additionally, you&#39;ll want any files that should reside at the root (such as CNAME) to be moved to static.</description>
     </item>
     
+    <item>
+      <title>Project 1: Exploratory Data Analysis</title>
+      <link>/project1/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project1/</guid>
+      <description>#Joining dataframes demo &amp;lt;- as.data.frame(MplsDemo) stops &amp;lt;- as.data.frame(MplsStops) stops &amp;lt;- stops %&amp;gt;% pivot_wider(names_from=problem, values_from=preRace) stops &amp;lt;- stops %&amp;gt;% pivot_longer(cols=c(&amp;#39;suspicious&amp;#39;, &amp;#39;traffic&amp;#39;), names_to=&amp;#39;problem&amp;#39;, values_to=&amp;#39;preRace&amp;#39;) fulldata &amp;lt;- right_join(demo, stops) %&amp;gt;% na.omit(col=personSearch) ## Joining, by = &amp;quot;neighborhood&amp;quot; ## Warning: Column `neighborhood` joining character vector and factor, coercing ## into character vector diff_neighborhoods &amp;lt;- anti_join(demo, stops) ## Joining, by = &amp;quot;neighborhood&amp;quot; ## Warning: Column `neighborhood` joining character vector and factor, coercing ## into character vector #Adding variables in the joined dataframe fulldata &amp;lt;- fulldata %&amp;gt;% mutate(white_pop=white*population, black_pop=black*population, foreign_pop=foreignBorn*population, in_poverty=poverty*population, college_educated=collegeGrad*population) fulldata &amp;lt;- fulldata %&amp;gt;% group_by(neighborhood, race) %&amp;gt;% mutate(race_number_of_stops=n()) fulldata &amp;lt;- fulldata %&amp;gt;% group_by(neighborhood, gender) %&amp;gt;% mutate(gender_number_of_stops=n()) The reason I decided to do a right join on the two data frames is because this would provide information about each person and the neighborhood they live in to determine if certain precincts have more arrests in one neighborhood over another and if there is a disproporionate number of arrests based on race or gender.</description>
+    </item>
+    
+    <item>
+      <title>Project 2: Modeling</title>
+      <link>/project2/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/project2/</guid>
+      <description>Name: Sahil Shah UT EID: sbs2756
+library(dplyr) ## ## Attaching package: &amp;#39;dplyr&amp;#39; ## The following objects are masked from &amp;#39;package:stats&amp;#39;: ## ## filter, lag ## The following objects are masked from &amp;#39;package:base&amp;#39;: ## ## intersect, setdiff, setequal, union setwd(&amp;quot;/home/sahil/&amp;quot;) mlb &amp;lt;- read.csv(&amp;quot;mlb.csv&amp;quot;) mlb &amp;lt;- mlb %&amp;gt;% subset(League!=&amp;#39;Both&amp;#39;) Summary of dataset The dataset that I have chosen to use contains the statistics of the top 100 batters in the MLB during the 2014 season.</description>
+    </item>
+    
+    <item>
+      <title>Projects</title>
+      <link>/projects/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      
+      <guid>/projects/</guid>
+      <description>Python Projects
+Evolutionary Program Utilizing the pinetree simulator: Evolutionary program that automatically evolves genomes based on user’s specifications.
+Data Structures and Recursion: Assignments completed in a data structures and algorithms computer science course.
+R Projects
+Data Wrangling and Exploratory Analysis: Preliminary data analysis on the neighborhood demographics and total arrests in Minneapolis in 2017.
+Modeling, Inference, Predition: Statistical modeling of the top 100 batters in the MLB during the 2014 season.</description>
+    </item>
+    
   </channel>
 </rss>

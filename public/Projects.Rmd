@@ -1,0 +1,30 @@
+---
+title: "Projects"
+author: "Sahil Shah"
+date: "12/13/2019"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+Python Projects
+```{R}
+```
+[Evolutionary Program Utilizing the pinetree simulator](https://github.com/SahilBShah/pinetree-toys):
+Evolutionary program that automatically evolves genomes based on user's specifications.
+```{R}
+```
+[Data Structures and Recursion](https://github.com/SahilBShah/CS313E):
+Assignments completed in a data structures and algorithms computer science course.
+```{R}
+```
+R Projects
+```{R}
+```
+[Data Wrangling and Exploratory Analysis](/Project1):
+Preliminary data analysis on the neighborhood demographics and total arrests in Minneapolis in 2017.
+```{R}
+```
+[Modeling, Inference, Predition](/Project2):
+Statistical modeling of the top 100 batters in the MLB during the 2014 season.

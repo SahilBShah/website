@@ -1,3 +1,11 @@
+---
+title: 'Project 1: Exploratory Data Analysis'
+author: "Sahil Shah"
+UT Eid: "sbs2756"
+date: "10/19/2019"
+output: html_document
+---
+
 
 
 <pre class="r"><code>#Joining dataframes
@@ -188,19 +196,19 @@ white_college &lt;- fulldata %&gt;% ggplot(aes(x=white, y=collegeGrad)) + geom_l
 black_college &lt;- fulldata %&gt;% ggplot(aes(x=black, y=collegeGrad)) + geom_line(stat=&#39;identity&#39;) + ylab(&#39;College Educated&#39;) + xlab(&#39;Percent Black in Neighborhood&#39;)
 college_income &lt;- fulldata %&gt;% ggplot(aes(x=collegeGrad, y=hhIncome)) + geom_line(stat=&#39;identity&#39;) + ylab(&#39;Household Income&#39;) + xlab(&#39;Percent Foreign Born in Neighborhood&#39;)
 grid.arrange(white_college, black_college, college_income)</code></pre>
-<p><img src="Project1_files/figure-html/graphs1-1.png" width="672" /></p>
+<p><img src="/Project1_files/figure-html/graphs1-1.png" width="672" /></p>
 <p>These three graphs portray the relationship between college education, race, and household income and were necessary to show how college education disproportionately favors those that are white compared to those that are black. We can observe from these plots that neighborhoods that have a higher population of whites tend to be college educated and those that are colege educated have higher household incomes. Thus, we can interpret that whites have higher household incomes and that neighborhoods that are predominantly white are disproportionately richer than their non-white counterparts.</p>
 <pre class="r"><code>#Number of stops by race
 nstops_bar &lt;- race_stops %&gt;% ggplot(aes(x=race, y=sum_stops, fill=race)) + geom_bar(stat=&#39;identity&#39;) + xlab(&#39;Race&#39;) + ylab(&#39;Number of Stops&#39;)
 ncites_bar &lt;- race_cites_per_stop %&gt;% ggplot(aes(x=race, y=perc_of_cites, fill=race)) + geom_bar(stat=&#39;identity&#39;) + xlab(&#39;Race&#39;) + ylab(&#39;Percent Chance of a Citation per Stop&#39;)
 grid.arrange(nstops_bar, ncites_bar)</code></pre>
-<p><img src="Project1_files/figure-html/graphs2-1.png" width="672" /></p>
+<p><img src="/Project1_files/figure-html/graphs2-1.png" width="672" /></p>
 <p>These two bar graphs display data related to the number of stops by race and the percent chance that a certain race will be issued a citation when stopped. Interestingly, although blacks are stopped at a disproportionately high rate, asians and latinos are issued the most citations. Thus, this information shows that even if a certain race is stopped at a high rate that does not necessarily mean that they will receive a citation of any sort as asians and latinos are stopped at a relatively low rate. Although there are some that were of an unknown race and were stopped that could potentially skew the data, there are enough data points in order to make certain conclusions.</p>
 <pre class="r"><code>#Relationship between foreign born and number of stops per precinct
 foreign_stops_bar &lt;- pol_prec_demo %&gt;% ggplot(aes(x=policePrecinct, y=perc_foreign, fill=policePrecinct)) + geom_bar(stat=&#39;summary&#39;, fun.y=&#39;mean&#39;) + xlab(&#39;Police Precinct&#39;) + ylab(&#39;Average Percent of Foreigners per Precinct&#39;)
 precinct_nstops &lt;- nstops_precinct %&gt;% ggplot(aes(x=policePrecinct, y=sum_stops, fill=policePrecinct)) + geom_bar(stat=&#39;identity&#39;) + xlab(&#39;Police Precinct&#39;) + ylab(&#39;Total Number of Stops per Precinct&#39;)
 grid.arrange(precinct_nstops, foreign_stops_bar)</code></pre>
-<p><img src="Project1_files/figure-html/graphs3-1.png" width="672" /></p>
+<p><img src="/Project1_files/figure-html/graphs3-1.png" width="672" /></p>
 <p>These two bar graphs display an interesting trend within the number of stops each police precinct makes. When looking at the first graph, one can determine the average number of stops each precinct has made. The second graph tells us the average number of foreigners contained within eahc precinct’s jurisdiction. When comparing the two graphs, it is apparent that precincts with more foreigners within their jurisdiction have less stops. However, when exploring the dataset from before, we could determine that blacks and whites were both arrested at high rates within each precinct and no trand could be found from that data. Thus, we can conclude that neighborhoods with more foreign born residents will have less stops in their area.</p>
 <pre class="r"><code>#PCA
 #A variable is created to view the correlation matrix of the numeric variables
@@ -279,5 +287,5 @@ full_pca$rotation[,1:2]%&gt;%as.data.frame%&gt;%rownames_to_column%&gt;%
   geom_vline(aes(xintercept=0),lty=2)+ylab(&quot;PC2&quot;)+xlab(&quot;PC1&quot;)+
   geom_segment(aes(x=0,y=0,xend=PC1,yend=PC2),arrow=arrow(),col=&quot;red&quot;)+
   geom_label(aes(x=PC1*1.1,y=PC2*1.1,label=rowname))</code></pre>
-<p><img src="Project1_files/figure-html/pca-1.png" width="672" /></p>
+<p><img src="/Project1_files/figure-html/pca-1.png" width="672" /></p>
 <p>After principle component analysis was conducted and the plot was generated, many of my correlations found from before are further supported. We can see that PC1 separates those that have a college education, are white, and have a high household income from the number of stops by race and gender and those that are foreign born or black. Thus, this information supports my assertions that whites tend to be more college educated and have a higher household income in Minneapolis than those that are black or foreign born. Furthermore, whites are stopped at a lower rate than their non-white counterparts. One other interesting correlation is that both non-white men and women tend to be stopped at a higher rate than whites regardless of gender.</p>
