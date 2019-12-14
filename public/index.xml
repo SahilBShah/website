@@ -17,7 +17,7 @@
       <pubDate>Fri, 13 Dec 2019 00:00:00 +0000</pubDate>
       
       <guid>/blog/the-importance-of-pandas-in-python/</guid>
-      <description></description>
+      <description>Pandas is a widely used tool within Python that helps in data manipulation and analysis. My first introduction into Pandas was while working on a project in the Wilke Lab at UT Austin when developing an evolutionary program (This project can be found under the “Projects” tab on the website). Without this package, the reading, writing, and rearanging of files would have been much more difficult as Pandas takes many of its tools from popular R functions.</description>
     </item>
     
     <item>

@@ -5,5 +5,14 @@ date: '2019-12-13'
 slug: the-importance-of-pandas-in-python
 categories: []
 tags: []
-description: ''
+description: 'This article delves into the ins and outs of using the Pandas dataframe in Python. Currently being updated.'
 ---
+  Pandas is a widely used tool within Python that helps in data manipulation and analysis. My first introduction into Pandas was while working on a project in the Wilke Lab at UT Austin when developing an evolutionary program (This project can be found under the "Projects" tab on the website). Without this package, the reading, writing, and rearanging of files would have been much more difficult as Pandas takes many of its tools from popular R functions. This makes it much easier to manipulate data into the format that is needed as many of the functions are intuitive and quick to learn! That is what makes R such a great programming language. But I will talk about that more in my next blog post.
+  One life-saving attribute that Pandas has is the ability to remove the need for loops when trying to manipulate data. Traditionally in Python, data manipulation would have been done with a variety of loops that would parse through the data and shape the rows and columns into the design the user wanted. However, when Pandas was introduced, the need for loops were no more! It took a complicated process of iterating through a table manually and simplified it by having to just use a function that would alter the dataset's design. Pandas also made it easier to compare data from different datasets as the user could format both datasets to contain a similar design and then find differences between each cell within the sets being analyzed.
+  An example of using Pandas in a program can be shown in the project that I previously mentioned. The code is located on GitHub and is open-sourced for anyone that would like to have a crack at it! One aspect I wanted to point out was that when importing the Pandas package into Python, the norm is to import pandas as pd so that the user does not have to type out pandas every time they wanted to call a function within that package. Lastly, I wanted to list some of the most important Pandas functions below and provide a brief description of each one so that it can help give an idea of some of the uses of Pandas:
+  - melt() - The dataframe is pivoted to go from the wide format to the long format.
+  - pivot_table() - The dataframe is altered into a spreadsheet style format.
+  - merge() - Combine two dataframes with one another based on a common variable.
+  - unique() - Only show the unique values in a certain row or column.
+  - isna() - Determine if there is a NA value in the dataframe.
+However, these are only a handful of useful functions in Pandas but more can be found using the Pandas documentation that can be found here: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.DataFrame.html.
