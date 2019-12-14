@@ -8,18 +8,43 @@
   </url>
   
   <url>
+    <loc>/categories/</loc>
+    <lastmod>2019-12-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/pandas/</loc>
+    <lastmod>2019-12-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/categories/python/</loc>
+    <lastmod>2019-12-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/python/</loc>
+    <lastmod>2019-12-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/sahil/</loc>
+    <lastmod>2019-12-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
     <loc>/</loc>
+    <lastmod>2019-12-13T00:00:00+00:00</lastmod>
+  </url>
+  
+  <url>
+    <loc>/tags/</loc>
     <lastmod>2019-12-13T00:00:00+00:00</lastmod>
   </url>
   
   <url>
     <loc>/blog/the-importance-of-pandas-in-python/</loc>
     <lastmod>2019-12-13T00:00:00+00:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/categories/</loc>
-    <lastmod>2016-10-02T22:55:05-04:00</lastmod>
   </url>
   
   <url>
@@ -34,11 +59,6 @@
   
   <url>
     <loc>/tags/projects/</loc>
-    <lastmod>2016-10-02T22:55:05-04:00</lastmod>
-  </url>
-  
-  <url>
-    <loc>/tags/</loc>
     <lastmod>2016-10-02T22:55:05-04:00</lastmod>
   </url>
   
