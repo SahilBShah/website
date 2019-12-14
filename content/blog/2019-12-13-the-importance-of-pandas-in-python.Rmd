@@ -3,8 +3,8 @@ title: The Importance of Pandas in Python
 author: Sahil Shah
 date: '2019-12-13'
 slug: the-importance-of-pandas-in-python
-categories: []
-tags: []
+categories: [Python]
+tags: [Pandas, Python, Sahil]
 description: 'This article delves into the ins and outs of using the Pandas dataframe in Python. Currently being updated.'
 ---
   Pandas is a widely used tool within Python that helps in data manipulation and analysis. My first introduction into Pandas was while working on a project in the Wilke Lab at UT Austin when developing an evolutionary program (This project can be found under the "Projects" tab on the website). Without this package, the reading, writing, and rearanging of files would have been much more difficult as Pandas takes many of its tools from popular R functions. This makes it much easier to manipulate data into the format that is needed as many of the functions are intuitive and quick to learn! That is what makes R such a great programming language. But I will talk about that more in my next blog post.
