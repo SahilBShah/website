@@ -8,7 +8,7 @@ output: html_document
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
-Python Projects:
+**Python Projects:**
 ```{R}
 ```
 [Evolutionary Program Utilizing the pinetree Simulator](https://github.com/SahilBShah/pinetree-toys):
@@ -19,7 +19,11 @@ Evolutionary program that automatically evolves genomes based on user's specific
 Assignments completed in a data structures and algorithms computer science course.
 ```{R}
 ```
-R Projects:
+[MetaGaia: A tool for analyzing bin abundances and metabolic profiles](https://github.com/valdeanda/MetaGaia):
+Metagenomics pipeline to compute the relative bin abundances and map genomes to associated metabolic processes.
+```{R}
+```
+**R Projects:**
 ```{R}
 ```
 [Data Wrangling and Exploratory Analysis](/Project1):
